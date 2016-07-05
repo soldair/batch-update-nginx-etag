@@ -1,6 +1,6 @@
 {
   "name": "batch-update-nginx-etag",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "set file mtime to content based etag value with nginx-etag",
   "main": "index.js",
   "scripts": {
