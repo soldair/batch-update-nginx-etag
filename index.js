@@ -1,13 +1,11 @@
-var walkdir = require('walkdir')
 var pressure = require('pressure-stream')
+var split2 = require('split2')
 var etag = require('nginx-etag')
 var once = require('once')
 
-module.exports = function(path,filter,done){
+module.exports = function(filter,done){
   done = once(done)
 
-  var walkEnded = false;
-  
   var pending = 0
 
   var ps = pressure(function(path,cb){
@@ -29,23 +27,12 @@ module.exports = function(path,filter,done){
 
   function isdone(){
     setImmediate(function(){
-      if(!pending && walkEnded) {
+      if(!pending) {
         done()
       }
     })
   }
 
-
-  var em = walkdir(path,function(path){
-    path = filter(path)
-    if(!path) return
-    
-    ps.write(path)  
-  })
-
-  em.on('end',function(){
-    walkEnded = true
-  })
-
+  return ps
 }
 

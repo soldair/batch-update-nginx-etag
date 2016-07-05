@@ -1,12 +1,7 @@
 #!/usr/bin/env node
 
 var yargs = require('yargs')
-  .usage('$0 [options]')
-  .option('path', {
-    alias: 'p',
-    describe: 'directory to scan for files',
-    required: true
-  })  
+  .usage('find . | $0 [options]')
   .option('filter',{
     alias:"f",
     describe:"regex for paths you want to match",
@@ -26,7 +21,8 @@ var batch = require('../')
 
 var regex = new RegExp(argv.filter) 
 
-batch(argv.path,function(file){
+
+process.stdin.pipe(require('split2')()).pipe(batch(function(file){
   regex.lastIndex = 0
   if(!regex.test(file)) return;
 
@@ -38,7 +34,7 @@ batch(argv.path,function(file){
   console.log(arguments)
   console.log('done.')
   if(err) process.exit(1)
-})
+}))
 
 
 
