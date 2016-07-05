@@ -4,7 +4,7 @@ set file mtime to content based etag value with nginx-etag
 ```sh
 npm install -g batch-update-nginx-etag
 
-nginx-etag --path ./ --filter '.js$'
+find ./ | nginx-etag --filter '.js$'
 ```
 
 this provides a command that sets the modified time of all matching files to the value of the first 32 bits of it's md5 sum.

@@ -11,6 +11,11 @@ var yargs = require('yargs')
     alias: 'd',
     describe: 'just print the files this would change but do not change any.',
   })
+  .option('concurrency', {
+    alias: 'c',
+    describe: 'the number of files to process at a time.',
+    default:10
+  })
   .help('h')
   .alias('h', 'help')
 
@@ -22,7 +27,7 @@ var batch = require('../')
 var regex = new RegExp(argv.filter) 
 
 
-process.stdin.pipe(require('split2')()).pipe(batch(function(file){
+process.stdin.pipe(require('split2')()).pipe(batch({concurrency:argv.concurrency},function(file){
   regex.lastIndex = 0
   if(!regex.test(file)) return;
 

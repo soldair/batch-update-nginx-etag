@@ -3,7 +3,15 @@ var split2 = require('split2')
 var etag = require('nginx-etag')
 var once = require('once')
 
-module.exports = function(filter,done){
+module.exports = function(opts,filter,done){
+  if(typeof opts === 'function'){
+    done = filter
+    filter = opts
+    opts = {}
+  }
+
+  opts = opts||{}
+
   done = once(done)
 
   var pending = 0
@@ -20,7 +28,7 @@ module.exports = function(filter,done){
     })
 
   },{
-    high:10,low:10,max:10
+    high:opts.concurrency||10,low:opts.concurrency||10,max:opts.concurrency||10
   }).on('end',function(){
     isdone()
   }).on('error',function(err){
