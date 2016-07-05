@@ -9,10 +9,13 @@ module.exports = function(filter,done){
   var pending = 0
 
   var ps = pressure(function(path,cb){
+    if(!filter(path)) return cb()
+
     pending++;
     etag.setContentBased(path,function(err,data){
+      if(err) console.error(err)
       pending--
-      cb(err,path)
+      cb(false,path)
       isdone()
     })
 
